@@ -1,0 +1,255 @@
+[INFO] query 0
+[INFO] query 0: 280.73533333333336ms
+[INFO] query 1
+[INFO] query 1: 11369.289333333334ms
+[INFO] query 2
+[INFO] query 2: 2001.8266666666668ms
+[INFO] query 3
+[INFO] query 3: 1289.3556666666668ms
+[INFO] query 4
+[INFO] query 4: 182.74266666666668ms
+[INFO] query 5
+[INFO] query 5: 12421.277666666667ms
+[INFO] query 6
+[INFO] query 6: 5.345666666666666ms
+[INFO] query 7
+[INFO] query 7: 177.81033333333335ms
+[INFO] query 8
+[INFO] query 8: 205.71466666666666ms
+[INFO] query 9
+[INFO] query 9: 32366.461ms
+[INFO] query 10
+[INFO] query 10: 16420.299ms
+[INFO] query 11
+[INFO] query 11: 238.70299999999997ms
+[INFO] query 12
+[INFO] query 12: 1529.424ms
+[INFO] query 13
+[INFO] query 13: 12787.254ms
+[INFO] query 14
+[INFO] query 14: 22.622333333333334ms
+[INFO] query 15
+[INFO] query 15: 9124.327ms
+[INFO] query 16
+[INFO] query 16: 7285.030666666668ms
+[INFO] query 17
+[INFO] query 17: 4350.105333333333ms
+[INFO] query 18
+[INFO] query 18: 583.3556666666667ms
+[INFO] query 19
+[INFO] query 19: 13038.869666666667ms
+[INFO] query 20
+[INFO] query 20: 10542.935333333333ms
+[INFO] query 21
+[INFO] query 21: 24283.728666666666ms
+[INFO] query 22
+[INFO] query 22: 2081.1216666666664ms
+[INFO] query 23
+[INFO] query 23: 4925.589000000001ms
+[INFO] query 24
+[INFO] query 24: 1658.2916666666667ms
+[INFO] query 25
+[INFO] query 25: 4141.195000000001ms
+[INFO] query 26
+[INFO] query 26: 858.2406666666666ms
+[INFO] query 27
+[INFO] query 27: 537.6293333333333ms
+[INFO] query 28
+[INFO] query 28: 9963.923666666667ms
+[INFO] query 29
+[INFO] query 29: 102.46199999999999ms
+[INFO] query 30
+[INFO] query 30: 50.74699999999999ms
+[INFO] query 31
+[INFO] query 31: 29040.51566666667ms
+[INFO] query 32
+[INFO] query 32: 796.1016666666668ms
+[INFO] query 33
+[INFO] query 33: 3015.384ms
+[INFO] query 34
+[INFO] query 34: 2795.0679999999998ms
+[INFO] query 35
+[INFO] query 35: 1300.2923333333333ms
+[INFO] query 36
+[INFO] query 36: 195.475ms
+[INFO] query 37
+[INFO] query 37: 497.25333333333333ms
+[INFO] query 38
+[INFO] query 38: 183.09799999999998ms
+[INFO] query 39
+[INFO] query 39: 161.018ms
+[INFO] query 40
+[INFO] query 40: 10513.666ms
+[INFO] query 41
+[INFO] query 41: 143.10966666666667ms
+[INFO] query 42
+[INFO] query 42: 188.764ms
+[INFO] query 43
+[INFO] query 43: 148.9176666666667ms
+[INFO] query 44
+[INFO] query 44: 406.44366666666673ms
+[INFO] query 45
+[INFO] query 45: 3565.162666666667ms
+[INFO] query 46
+[INFO] query 46: 6539.106666666667ms
+[INFO] query 47
+[INFO] query 47: 717.4653333333332ms
+[INFO] query 48
+[INFO] query 48: 2103.86ms
+[INFO] query 49
+[INFO] query 49: 2337.0106666666666ms
+[INFO] query 50
+[INFO] query 50: 554.3133333333334ms
+[INFO] query 51
+[INFO] query 51: 7702.135666666666ms
+[INFO] query 52
+[INFO] query 52: 2686.7813333333334ms
+[INFO] query 53
+[INFO] query 53: 8.533999999999999ms
+[INFO] query 54
+[INFO] query 54: 2886.205ms
+[INFO] query 55
+[INFO] query 55: 7323.722666666666ms
+[INFO] query 56
+[INFO] query 56: 342.53099999999995ms
+[INFO] query 57
+[INFO] query 57: 14144.709ms
+[INFO] query 58
+[INFO] query 58: 713.464ms
+[INFO] query 59
+[INFO] query 59: 747.5506666666666ms
+[INFO] query 60
+ERROR:  syntax error at or near "1"
+LINE 4: FROM company_name AS cn, 1
+                                 ^
+Traceback (most recent call last):
+  File "/home/hive/workspace/0.LBO/postgres/python_utils/papers/How_Good_Are_Query_Optimizer/cost_model.py", line 24, in <module>
+    cost_running_time_PG()
+  File "/home/hive/workspace/0.LBO/postgres/python_utils/papers/How_Good_Are_Query_Optimizer/cost_model.py", line 12, in cost_running_time_PG
+    cost_list, running_time_list = run_cat_cost_running_time(queries=JOB_queries,
+  File "/home/hive/workspace/0.LBO/postgres/python_utils/papers/How_Good_Are_Query_Optimizer/./../../utils/run_queries_catch_infos.py", line 59, in run_cat_cost_running_time
+    planning_time_str, execution_time_str = out_str_lines[out_str_lines_len - 5], out_str_lines[
+IndexError: list index out of range
+[INFO] query 60
+[INFO] query 60: 930.4879999999999ms
+[INFO] query 61
+[INFO] query 61: 1438.3680000000002ms
+[INFO] query 62
+[INFO] query 62: 1054.2756666666667ms
+[INFO] query 63
+[INFO] query 63: 737.9556666666666ms
+[INFO] query 64
+[INFO] query 64: 247.763ms
+[INFO] query 65
+[INFO] query 65: 131.12699999999998ms
+[INFO] query 66
+[INFO] query 66: 4405.473666666666ms
+[INFO] query 67
+[INFO] query 67: 1642.7766666666666ms
+[INFO] query 68
+[INFO] query 68: 62.11433333333334ms
+[INFO] query 69
+[INFO] query 69: 199.78133333333335ms
+[INFO] query 70
+[INFO] query 70: 1452.4443333333336ms
+[INFO] query 71
+[INFO] query 71: 10380.007333333333ms
+[INFO] query 72
+[INFO] query 72: 163.41ms
+[INFO] query 73
+[INFO] query 73: 3.2503333333333337ms
+[INFO] query 74
+[INFO] query 74: 122.97733333333333ms
+[INFO] query 75
+[INFO] query 75: 979.3373333333333ms
+[INFO] query 76
+[INFO] query 76: 130.69066666666666ms
+[INFO] query 77
+[INFO] query 77: 82.20166666666667ms
+[INFO] query 78
+[INFO] query 78: 757.3716666666668ms
+[INFO] query 79
+[INFO] query 79: 88.738ms
+[INFO] query 80
+[INFO] query 80: 869.4966666666666ms
+[INFO] query 81
+[INFO] query 81: 14400.063666666667ms
+[INFO] query 82
+[INFO] query 82: 379.98333333333335ms
+[INFO] query 83
+[INFO] query 83: 10915.070666666667ms
+[INFO] query 84
+[INFO] query 84: 4810.131333333334ms
+[INFO] query 85
+[INFO] query 85: 17.677666666666667ms
+[INFO] query 86
+[INFO] query 86: 11306.510666666667ms
+[INFO] query 87
+[INFO] query 87: 8951.468666666668ms
+[INFO] query 88
+[INFO] query 88: 693.9859999999999ms
+[INFO] query 89
+[INFO] query 89: 14760.79733333333ms
+[INFO] query 90
+[INFO] query 90: 3514.8063333333334ms
+[INFO] query 91
+[INFO] query 91: 2743.465666666667ms
+[INFO] query 92
+[INFO] query 92: 1082.6466666666668ms
+[INFO] query 93
+[INFO] query 93: 749.5566666666665ms
+[INFO] query 94
+[INFO] query 94: 101.93866666666666ms
+[INFO] query 95
+[INFO] query 95: 305.95233333333334ms
+[INFO] query 96
+[INFO] query 96: 2278.753ms
+[INFO] query 97
+[INFO] query 97: 12.522333333333334ms
+[INFO] query 98
+[INFO] query 98: 9.920666666666667ms
+[INFO] query 99
+[INFO] query 99: 41.918ms
+[INFO] query 100
+[INFO] query 100: 498.98066666666665ms
+[INFO] query 101
+[INFO] query 101: 129.95733333333334ms
+[INFO] query 102
+[INFO] query 102: 26.849ms
+[INFO] query 103
+ERROR:  trailing junk after numeric literal at or near "0m"
+LINE 23:   AND ci.movie_id = 0mc.movie_id
+                             ^
+Traceback (most recent call last):
+  File "/home/hive/workspace/0.LBO/postgres/python_utils/papers/How_Good_Are_Query_Optimizer/cost_model.py", line 38, in <module>
+    cost_running_time_PG()
+  File "/home/hive/workspace/0.LBO/postgres/python_utils/papers/How_Good_Are_Query_Optimizer/cost_model.py", line 12, in cost_running_time_PG
+    cost_list, running_time_list = run_cat_cost_running_time(queries=JOB_queries,
+  File "/home/hive/workspace/0.LBO/postgres/python_utils/papers/How_Good_Are_Query_Optimizer/./../../utils/run_queries_catch_infos.py", line 59, in run_cat_cost_running_time
+    planning_time_str, execution_time_str = out_str_lines[out_str_lines_len - 5], out_str_lines[
+IndexError: list index out of range
+[INFO] query 103
+[INFO] query 103: 252.0436666666667ms
+[INFO] query 104
+[INFO] query 104: 621.939ms
+[INFO] query 105
+[INFO] query 105: 121.41233333333334ms
+[INFO] query 106
+[INFO] query 106: 2046.0100000000002ms
+[INFO] query 107
+Killed
+
+
+
+[INFO] query 107
+[INFO] query 107: 8127.546333333335ms
+[INFO] query 108
+[INFO] query 108: 40810.745ms
+[INFO] query 109
+[INFO] query 109: 4046.6946666666668ms
+[INFO] query 110
+[INFO] query 110: 145.87333333333333ms
+[INFO] query 111
+[INFO] query 111: 2617.617666666667ms
+[INFO] query 112
+[INFO] query 112: 12850.514000000001ms

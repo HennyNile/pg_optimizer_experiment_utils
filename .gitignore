@@ -1,0 +1,5 @@
+# Global excludes across all subdirectories
+*.pyc
+
+# dir
+.idea/
