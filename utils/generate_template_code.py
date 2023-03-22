@@ -1,14 +1,15 @@
 import itertools
 
 
-def generate_c_code(truth_cardinality, queries, start_query_order, generated_code_filepath='generated_c_code.txt'):
+def generate_c_code(truth_cardinality, queries, benchmark_name, start_query_order, generated_code_filepath='generated_c_code.txt'):
     all_c_code = ''
 
     # print function declaration
     query_order = start_query_order
     declaration = ''
     for i in range(len(queries)):
-        declaration += str.format('double get_truth_cardinality_job_query_{}(int total_relids);\n', query_order)
+        declaration += str.format('double get_truth_cardinality_{}_query_{}(int total_relids);\n', benchmark_name,
+                                  query_order)
         query_order += 1
     all_c_code += declaration + '\n\n'
 
@@ -17,7 +18,8 @@ def generate_c_code(truth_cardinality, queries, start_query_order, generated_cod
     switch_case = ''
     for i in range(len(queries)):
         switch_case += str.format('\t\t\t\tcase {}:\n', query_order)
-        switch_case += str.format('\t\t\t\t\treturn get_truth_cardinality_job_query_{}(total_relids);\n', query_order)
+        switch_case += str.format('\t\t\t\t\treturn get_truth_cardinality_{}_query_{}(total_relids);\n', benchmark_name,
+                                  query_order)
         query_order += 1
     all_c_code += switch_case + '\n\n'
 
@@ -34,7 +36,8 @@ def generate_c_code(truth_cardinality, queries, start_query_order, generated_cod
             c_code += table[0] + ' ' + table[1] + ', '
         c_code += ']\n'
 
-        c_code += str.format('double\nget_truth_cardinality_job_query_{}(int total_relids)\n', query_order)
+        c_code += str.format('double\nget_truth_cardinality_{}_query_{}(int total_relids)\n', benchmark_name,
+                             query_order)
         c_code += '{\n'
         c_code += '\tswitch (total_relids) {\n'
         for join_table_count in range(1, len(tables) + 1):

@@ -13,45 +13,43 @@ from .generate_template_code import generate_c_code
 
 
 # dbg19 configuration
-db = 'imdb'
 port = 5431
-default_command_head = str.format('/home/dbgroup/workspace/liqilong/LBO/pg15/bin/psql -p {} -d {}', port, db) \
-                       + ' -c "{}"'
+default_command_head = str.format('/home/dbgroup/workspace/liqilong/LBO/pg15/bin/psql -p {}', port) + ' -d {} -c "{}"'
 
 
-def modify_pg_conf_parameters(enable_truth_card=False, benchmark=0, query_order=0, max_parallel_workers_per_gather=0):
+def modify_pg_conf_parameters(db, enable_truth_card=False,benchmark=0, query_order=0, max_parallel_workers_per_gather=0):
     command_head = default_command_head
 
     # modify enable_truth_card
     cmd = 'alter system set enable_truth_card=false;'
     if enable_truth_card:
         cmd = 'alter system set enable_truth_card=true;'
-    subp = subprocess.Popen([command_head.format(cmd)], shell=True, stdout=subprocess.PIPE)
+    subp = subprocess.Popen([command_head.format(db, cmd)], shell=True, stdout=subprocess.PIPE)
     subp.communicate()
 
     # modify max_parallel_workers_per_gather
     cmd = 'alter system set max_parallel_workers_per_gather={};'.format(max_parallel_workers_per_gather)
-    subp = subprocess.Popen([command_head.format(cmd)], shell=True, stdout=subprocess.PIPE)
+    subp = subprocess.Popen([command_head.format(db, cmd)], shell=True, stdout=subprocess.PIPE)
     subp.communicate()
 
     if enable_truth_card:
         # modify benchmark
         cmd = 'alter system set benchmark={};'.format(benchmark)
-        subp = subprocess.Popen([command_head.format(cmd)], shell=True, stdout=subprocess.PIPE)
+        subp = subprocess.Popen([command_head.format(db, cmd)], shell=True, stdout=subprocess.PIPE)
         subp.communicate()
 
         # modify query_order
         cmd = 'alter system set query_order={};'.format(query_order)
-        subp = subprocess.Popen([command_head.format(cmd)], shell=True, stdout=subprocess.PIPE)
+        subp = subprocess.Popen([command_head.format(db, cmd)], shell=True, stdout=subprocess.PIPE)
         subp.communicate()
 
     # reload conf
     cmd = 'select pg_reload_conf();'
-    subp = subprocess.Popen([command_head.format(cmd)], shell=True, stdout=subprocess.PIPE)
+    subp = subprocess.Popen([command_head.format(db, cmd)], shell=True, stdout=subprocess.PIPE)
     subp.communicate()
 
 
-def run_cat_cost_runtime(query_paths, queries, run_times, start_query_order, end_query_order, store_filepath,
+def run_cat_cost_runtime(query_paths, queries, db, run_times, start_query_order, end_query_order, store_filepath,
                          enable_truth_card=False, benchmark=0, enable_print_plan=False,
                          max_parallel_workers_per_gather=0, in_memory=False, store_plan=False, store_plan_dir='./'):
     command_head = default_command_head
@@ -59,7 +57,7 @@ def run_cat_cost_runtime(query_paths, queries, run_times, start_query_order, end
     query_order = start_query_order
     store_file = open(store_filepath, 'a+')
     for i in range(start_query_order, end_query_order):
-        modify_pg_conf_parameters(enable_truth_card=enable_truth_card, benchmark=benchmark, query_order=i,
+        modify_pg_conf_parameters(db, enable_truth_card=enable_truth_card, benchmark=benchmark, query_order=i,
                                   max_parallel_workers_per_gather=max_parallel_workers_per_gather)
         query_order += 1
         query = queries[i]
@@ -109,13 +107,13 @@ def run_cat_cost_runtime(query_paths, queries, run_times, start_query_order, end
     return cost_list, runtime_list
 
 
-def run_cat_card(queries):
+def run_cat_card(queries, db):
     command_head = default_command_head
     result_cards = []
     for i in tqdm(range(len(queries))):
         query = queries[i]
         # for query in queries:
-        command = str.format(command_head, query)
+        command = str.format(command_head, db, query)
         subp = subprocess.Popen([command], shell=True, stdout=subprocess.PIPE)
         (out, err) = subp.communicate()
         result_card = out.decode().split('\n')[2].strip()
@@ -123,10 +121,10 @@ def run_cat_card(queries):
     return result_cards
 
 
-def run_cat_subquery_card(query_paths, queries, start_query_order, end_query_order, log_filepath='subquery_card.log',
-                          generated_code_filepath='generated_code.txt'):
+def run_cat_subquery_card(query_paths, queries, db, benchmark_name, start_query_order, end_query_order,
+                          log_filepath='subquery_card.log', generated_code_filepath='generated_code.txt'):
     # 0. disable truth card
-    modify_pg_conf_parameters(enable_truth_card=False)
+    modify_pg_conf_parameters(db, enable_truth_card=False)
 
     # 1. parse queries
     parsed_queries = []
@@ -155,7 +153,7 @@ def run_cat_subquery_card(query_paths, queries, start_query_order, end_query_ord
         for com, query_text in sub_queries_rcount.items():
             coms.append(com)
             queries_text.append(query_text)
-        result_cards = run_cat_card(queries_text)
+        result_cards = run_cat_card(queries_text, db)
         assert len(coms) == len(result_cards)
 
         log_file.write('    ' + query.query_path + '\n')
@@ -173,5 +171,5 @@ def run_cat_subquery_card(query_paths, queries, start_query_order, end_query_ord
     log_file.close()
 
     # 4. generate corresponding c code
-    c_code = generate_c_code(truth_cardinality, queries, start_query_order,
+    c_code = generate_c_code(truth_cardinality, queries, benchmark_name, start_query_order,
                              generated_code_filepath=generated_code_filepath)

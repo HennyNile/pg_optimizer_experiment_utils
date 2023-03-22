@@ -30,6 +30,16 @@ def load_JOB_light():
     return query_paths, queries
 
 
+def load_TPCH():
+    dir_path = sys.path[-1] + 'queries/tpch/'
+    return load_queries(dir_path)
+
+
+def load_TPCH_modified4pg():
+    dir_path = sys.path[-1] + 'queries/tpch_modified4pg/'
+    return load_queries(dir_path)
+
+
 def load_cost_runtime(filepath):
     cost_list, runtime_list = [], []
     with open(filepath, 'r+') as f:

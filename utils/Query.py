@@ -21,14 +21,40 @@ class Query:
 
     def parse_query(self, query_path, query_text):
         # remove ;
-        query_text = query_text.replace('\n', ' ').replace(';', '').strip()
+        query_text = query_text.replace('\n', ' ').replace(';', '').replace('\t', ' ').strip()
         while '  ' in query_text:
             query_text = query_text.replace('  ', ' ')
-        select_text = query_text.split('FROM')[0].split('SELECT')[1].strip()
-        tables_text = [table.strip() for table in query_text.split('FROM')[1].split('WHERE')[0].split(',')]
-        predicates_text = ''
-        if len(query_text.split('WHERE')) == 2:
-            predicates_text = query_text.split('WHERE')[1].strip()
+
+        char_case = ''
+        if 'SELECT' in query_text:
+            char_case = 'upper'
+        elif 'select' in query_text:
+            char_case = 'lower'
+        else:
+            assert False
+
+        select_text, tables_text, predicates_text = '', '', ''
+        if char_case == 'lower':
+            select_text = query_text.split('from')[0].split('select')[1].strip()
+            tables_text = [table.strip() for table in query_text.split('from')[-1].split('where')[0].split(',')]
+            predicates_text = ''
+            if 'where' in query_text:
+                predicates_text = query_text.split('where')[1].strip()
+            if 'group by' in predicates_text:
+                predicates_text = predicates_text.split('group by')[0].strip()
+        elif char_case == 'upper':
+            select_text = query_text.split('FROM')[0].split('SELECT')[1].strip()
+            tables_text = [table.strip() for table in query_text.split('FROM')[1].split('WHERE')[0].split(',')]
+            predicates_text = ''
+            if 'WHERE' in query_text:
+                predicates_text = query_text.split('WHERE')[1].strip()
+            if 'GROUP BY' in predicates_text:
+                predicates_text = predicates_text.split('GROUP BY')[0].strip()
+
+        if 'LIMIT' in predicates_text:
+            predicates_text = predicates_text.split('LIMIT')[0]
+        if 'limit' in predicates_text:
+            predicates_text = predicates_text.split('limit')[0]
 
         # parse select
         select = select_text
@@ -62,19 +88,21 @@ class Query:
                             break
                 all_predicates.append(predicate)
                 predicate = ''
-            elif predicates_text.startswith('AND'):
+            elif predicates_text.startswith('AND') or predicates_text.startswith('and'):
                 predicates_text = predicates_text[3:].strip()
             else:
                 AND_break = True
                 for i in range(0, len(predicates_text)):
-                    if predicates_text[i:].strip().startswith('BETWEEN'):
+                    if predicates_text[i:].strip().startswith('BETWEEN') or \
+                            predicates_text[i:].strip().startswith('between'):
                         AND_break = False
                     predicate += predicates_text[i]
                     if AND_break:
-                        if predicates_text[i + 1:].strip().startswith('AND'):
+                        if predicates_text[i + 1:].strip().startswith('AND') or \
+                                predicates_text[i + 1:].strip().startswith('and'):
                             break
                     else:
-                        if predicates_text[i + 1:].startswith('AND'):
+                        if predicates_text[i + 1:].startswith('AND') or predicates_text[i + 1:].startswith('and'):
                             AND_break = True
                 predicates_text = predicates_text[len(predicate):].strip()
                 all_predicates.append(predicate)
@@ -257,7 +285,7 @@ class Query:
     def self_print(self):
         print('select:\n', self.select)
         print('tables:\n', self.tables)
-        print('joins:\n', self.joins)
+        print('joins:\n', self.join_column_tables)
         print('predicates:\n', self.predicates)
 
     def check_subJoin(self, tables_key):
