@@ -17,7 +17,8 @@ port = 5431
 default_command_head = str.format('/home/dbgroup/workspace/liqilong/LBO/pg15/bin/psql -p {}', port) + ' -d {} -c "{}"'
 
 
-def modify_pg_conf_parameters(db, enable_truth_card=False,benchmark=0, query_order=0, max_parallel_workers_per_gather=0):
+def modify_pg_conf_parameters(db, enable_truth_card=False, benchmark=0, query_order=0,
+                              max_parallel_workers_per_gather=4):
     command_head = default_command_head
 
     # modify enable_truth_card

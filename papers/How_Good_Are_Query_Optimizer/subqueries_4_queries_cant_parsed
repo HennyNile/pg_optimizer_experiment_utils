@@ -2,13 +2,39 @@ Some TPC-H queries couldn't be parsed in my implemented parser in utils/parser. 
 3 (13.sql), 5 (19.sql), 7 (4.sql), 10 (7.sql). 3 is the index of 13.sql.
 
 13.sql
-(c,) select count(*) from customer c;
-(o,) select count(*) from orders where o_comment not like '%special%requests%';
-(c, o,) select count(*) from customer left outer join orders on c_custkey = o_custkey and o_comment not like '%special%requests%';
+('c',) select count(*) from customer c;
+('o',) select count(*) from orders where o_comment not like '%special%requests%';
+('c', o,) select count(*) from customer left outer join orders on c_custkey = o_custkey and o_comment not like '%special%requests%';
 
 19.sql
-(l,) select count(*) from lineitem l where (l.l_quantity >= 2 and l.l_quantity <= 2 + 10 and l.l_shipmode in ('AIR', 'AIR REG') and l.l_shipinstruct = 'DELIVER IN PERSON') or (l.l_quantity >= 11 and l.l_quantity <= 11 + 10 and l.l_shipmode in ('AIR', 'AIR REG') and l.l_shipinstruct = 'DELIVER IN PERSON') or (l.l_quantity >= 26 and l.l_quantity <= 26 + 10 and l.l_shipmode in ('AIR', 'AIR REG') and l.l_shipinstruct = 'DELIVER IN PERSON');
-(p,) select count(*) from part p where (p.p_brand = 'Brand#51' and p.p_container in ('SM CASE', 'SM BOX', 'SM PACK', 'SM PKG') and p.p_size between 1 and 5) or (p.p_brand = 'Brand#45' and p.p_container in ('MED BAG', 'MED BOX', 'MED PKG', 'MED PACK') and p.p_size between 1 and 10) or (p.p_brand = 'Brand#55' and p.p_container in ('LG CASE', 'LG BOX', 'LG PACK', 'LG PKG') and p.p_size between 1 and 15);
-(l, p,) select count(*) from lineitem l, part p where (p.p_partkey = l.l_partkey and p.p_brand = 'Brand#51' and p.p_container in ('SM CASE', 'SM BOX', 'SM PACK', 'SM PKG') and l.l_quantity >= 2 and l.l_quantity <= 2 + 10 and p.p_size between 1 and 5 and l.l_shipmode in ('AIR', 'AIR REG') and l.l_shipinstruct = 'DELIVER IN PERSON') or (p.p_partkey = l.l_partkey and p.p_brand = 'Brand#45' and p.p_container in ('MED BAG', 'MED BOX', 'MED PKG', 'MED PACK') and l.l_quantity >= 11 and l.l_quantity <= 11 + 10 and p.p_size between 1 and 10 and l.l_shipmode in ('AIR', 'AIR REG') and l.l_shipinstruct = 'DELIVER IN PERSON') or (p.p_partkey = l.l_partkey and p.p_brand = 'Brand#55' and p.p_container in ('LG CASE', 'LG BOX', 'LG PACK', 'LG PKG') and l.l_quantity >= 26 and l.l_quantity <= 26 + 10 and p.p_size between 1 and 15 and l.l_shipmode in ('AIR', 'AIR REG') and l.l_shipinstruct = 'DELIVER IN PERSON') LIMIT 1;
+('l',) select count(*) from lineitem l where (l.l_quantity >= 2 and l.l_quantity <= 2 + 10 and l.l_shipmode in ('AIR', 'AIR REG') and l.l_shipinstruct = 'DELIVER IN PERSON') or (l.l_quantity >= 11 and l.l_quantity <= 11 + 10 and l.l_shipmode in ('AIR', 'AIR REG') and l.l_shipinstruct = 'DELIVER IN PERSON') or (l.l_quantity >= 26 and l.l_quantity <= 26 + 10 and l.l_shipmode in ('AIR', 'AIR REG') and l.l_shipinstruct = 'DELIVER IN PERSON');
+('p',) select count(*) from part p where (p.p_brand = 'Brand#51' and p.p_container in ('SM CASE', 'SM BOX', 'SM PACK', 'SM PKG') and p.p_size between 1 and 5) or (p.p_brand = 'Brand#45' and p.p_container in ('MED BAG', 'MED BOX', 'MED PKG', 'MED PACK') and p.p_size between 1 and 10) or (p.p_brand = 'Brand#55' and p.p_container in ('LG CASE', 'LG BOX', 'LG PACK', 'LG PKG') and p.p_size between 1 and 15);
+('l', p,) select count(*) from lineitem l, part p where (p.p_partkey = l.l_partkey and p.p_brand = 'Brand#51' and p.p_container in ('SM CASE', 'SM BOX', 'SM PACK', 'SM PKG') and l.l_quantity >= 2 and l.l_quantity <= 2 + 10 and p.p_size between 1 and 5 and l.l_shipmode in ('AIR', 'AIR REG') and l.l_shipinstruct = 'DELIVER IN PERSON') or (p.p_partkey = l.l_partkey and p.p_brand = 'Brand#45' and p.p_container in ('MED BAG', 'MED BOX', 'MED PKG', 'MED PACK') and l.l_quantity >= 11 and l.l_quantity <= 11 + 10 and p.p_size between 1 and 10 and l.l_shipmode in ('AIR', 'AIR REG') and l.l_shipinstruct = 'DELIVER IN PERSON') or (p.p_partkey = l.l_partkey and p.p_brand = 'Brand#55' and p.p_container in ('LG CASE', 'LG BOX', 'LG PACK', 'LG PKG') and l.l_quantity >= 26 and l.l_quantity <= 26 + 10 and p.p_size between 1 and 15 and l.l_shipmode in ('AIR', 'AIR REG') and l.l_shipinstruct = 'DELIVER IN PERSON') LIMIT 1;
 
 4.sql
+('o',) select count(*) from orders o where o_orderdate >= date '1995-05-01' and o_orderdate < date '1995-05-01' + interval '3' month;
+('l',) select count(*) from lineitem l where l_commitdate < l_receiptdate;
+('o', l,) select count(*) from orders where o_orderdate >= date '1995-05-01' and o_orderdate < date '1995-05-01' + interval '3' month and exists (select * from lineitem where l_orderkey = o_orderkey and l_commitdate < l_receiptdate);
+
+7.sql
+('s',) SELECT count(*) FROM supplier AS s;
+('l',) SELECT count(*) FROM lineitem AS l WHERE l.l_shipdate between date '1995-01-01' and date '1996-12-31';
+('o',) SELECT count(*) FROM orders AS o;
+('c',) SELECT count(*) FROM customer AS c;
+('n1',) SELECT count(*) FROM nation AS n1 where n1.n_name = 'PERU' or n1.n_name = 'INDONESIA';
+('n2',) SELECT count(*) FROM nation AS n2 where n2.n_name = 'INDONESIA' or n2.n_name = 'PERU';
+('s', 'l') SELECT count(*) FROM supplier AS s, lineitem AS l WHERE s.s_suppkey=l.l_suppkey AND l.l_shipdate between date '1995-01-01' and date '1996-12-31';
+('s', 'n1') SELECT count(*) FROM supplier AS s, nation AS n1 WHERE s.s_nationkey=n1.n_nationkey and n1.n_name = 'PERU' or n1.n_name = 'INDONESIA';
+('l', 'o') SELECT count(*) FROM lineitem AS l, orders AS o WHERE l.l_orderkey=o.o_orderkey AND l.l_shipdate between date '1995-01-01' and date '1996-12-31';
+('o', 'c') SELECT count(*) FROM orders AS o, customer AS c WHERE o.o_custkey=c.c_custkey;
+('c', 'n2') SELECT count(*) FROM customer AS c, nation AS n2 WHERE c.c_nationkey=n2.n_nationkey and n2.n_name = 'INDONESIA' or n2.n_name = 'PERU';
+('s', 'l', 'o') SELECT count(*) FROM supplier AS s, lineitem AS l, orders AS o WHERE s.s_suppkey=l.l_suppkey AND l.l_orderkey=o.o_orderkey AND l.l_shipdate between date '1995-01-01' and date '1996-12-31';
+('s', 'l', 'n1') SELECT count(*) FROM supplier AS s, lineitem AS l, nation AS n1 WHERE s.s_suppkey=l.l_suppkey AND s.s_nationkey=n1.n_nationkey AND l.l_shipdate between date '1995-01-01' and date '1996-12-31' and (n1.n_name = 'PERU' or n1.n_name = 'INDONESIA');
+('l', 'o', 'c') SELECT count(*) FROM lineitem AS l, orders AS o, customer AS c WHERE l.l_orderkey=o.o_orderkey AND o.o_custkey=c.c_custkey AND l.l_shipdate between date '1995-01-01' and date '1996-12-31';
+('o', 'c', 'n2') SELECT count(*) FROM orders AS o, customer AS c, nation AS n2 WHERE o.o_custkey=c.c_custkey AND c.c_nationkey=n2.n_nationkey and (n2.n_name = 'INDONESIA' or n2.n_name = 'PERU');
+('s', 'l', 'o', 'c') SELECT count(*) FROM supplier AS s, lineitem AS l, orders AS o, customer AS c WHERE s.s_suppkey=l.l_suppkey AND l.l_orderkey=o.o_orderkey AND o.o_custkey=c.c_custkey AND l.l_shipdate between date '1995-01-01' and date '1996-12-31';
+('s', 'l', 'o', 'n1') SELECT count(*) FROM supplier AS s, lineitem AS l, orders AS o, nation AS n1 WHERE s.s_suppkey=l.l_suppkey AND s.s_nationkey=n1.n_nationkey AND l.l_orderkey=o.o_orderkey AND l.l_shipdate between date '1995-01-01' and date '1996-12-31' AND (n1.n_name = 'PERU' or n1.n_name = 'INDONESIA');
+('l', 'o', 'c', 'n2') SELECT count(*) FROM lineitem AS l, orders AS o, customer AS c, nation AS n2 WHERE l.l_orderkey=o.o_orderkey AND o.o_custkey=c.c_custkey AND c.c_nationkey=n2.n_nationkey AND l.l_shipdate between date '1995-01-01' and date '1996-12-31' AND (n2.n_name = 'INDONESIA' or n2.n_name = 'PERU');
+('s', 'l', 'o', 'c', 'n1') SELECT count(*) FROM supplier AS s, lineitem AS l, orders AS o, customer AS c, nation AS n1 WHERE s.s_suppkey=l.l_suppkey AND s.s_nationkey=n1.n_nationkey AND l.l_orderkey=o.o_orderkey AND o.o_custkey=c.c_custkey AND l.l_shipdate between date '1995-01-01' and date '1996-12-31' AND (n1.n_name = 'PERU' or n1.n_name = 'INDONESIA');
+('s', 'l', 'o', 'c', 'n2') SELECT count(*) FROM supplier AS s, lineitem AS l, orders AS o, customer AS c, nation AS n2 WHERE s.s_suppkey=l.l_suppkey AND l.l_orderkey=o.o_orderkey AND o.o_custkey=c.c_custkey AND c.c_nationkey=n2.n_nationkey AND l.l_shipdate between date '1995-01-01' and date '1996-12-31' AND (n2.n_name = 'INDONESIA' or n2.n_name = 'PERU');
+('s', 'l', 'o', 'c', 'n1', 'n2') SELECT count(*) FROM supplier AS s, lineitem AS l, orders AS o, customer AS c, nation AS n1, nation AS n2 WHERE s.s_suppkey=l.l_suppkey AND s.s_nationkey=n1.n_nationkey AND l.l_orderkey=o.o_orderkey AND o.o_custkey=c.c_custkey AND c.c_nationkey=n2.n_nationkey AND l.l_shipdate between date '1995-01-01' and date '1996-12-31' AND ((n1.n_name = 'PERU' and n2.n_name = 'INDONESIA') or (n1.n_name = 'INDONESIA' and n2.n_name = 'PERU'));

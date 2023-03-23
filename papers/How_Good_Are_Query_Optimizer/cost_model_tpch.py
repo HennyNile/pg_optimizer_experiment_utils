@@ -25,40 +25,43 @@ def compute_cost_runtime_error(cost_list, runtime_list):
     return avg_error
 
 
-def generate_true_card_tpch(db, sf=1):
+def generate_true_card_tpch(sf=1):
     # cat truth cardinality of tpc_h_sf
     query_paths, JOB_queries = load_TPCH_modified4pg()
-    # can not generate sub queries for 3 (13.sql), 5 (19.sql), 7 (4.sql), 10 (7.sql)
+    db = 'tpch_' + str(sf)
+    # can not generate sub queries for
+    # class 1: 3 (13.sql), 5 (19.sql), 7 (4.sql), 10 (7.sql) because can not parse these query
+    # class 2: 12 (9.sql) because cost more than 15 hours in TPC-H with sf=1
     run_cat_subquery_card(query_paths=query_paths,
                           queries=JOB_queries,
                           db=db,
-                          benchmark_name='tpch_' + str(sf),
+                          benchmark_name=db,
                           start_query_order=0,
                           end_query_order=3)
     run_cat_subquery_card(query_paths=query_paths,
                           queries=JOB_queries,
                           db=db,
-                          benchmark_name='tpch_' + str(sf),
+                          benchmark_name=db,
                           start_query_order=4,
                           end_query_order=5)
     run_cat_subquery_card(query_paths=query_paths,
                           queries=JOB_queries,
                           db=db,
-                          benchmark_name='tpch_' + str(sf),
+                          benchmark_name=db,
                           start_query_order=6,
                           end_query_order=7)
     run_cat_subquery_card(query_paths=query_paths,
                           queries=JOB_queries,
                           db=db,
-                          benchmark_name='tpch_' + str(sf),
+                          benchmark_name=db,
                           start_query_order=8,
                           end_query_order=10)
     run_cat_subquery_card(query_paths=query_paths,
                           queries=JOB_queries,
                           db=db,
-                          benchmark_name='tpch_' + str(sf),
+                          benchmark_name=db,
                           start_query_order=11,
-                          end_query_order=13)
+                          end_query_order=12)
 
 
 def cost_runtime_tpch_1():
@@ -84,7 +87,4 @@ if __name__ == '__main__':
     # print(query.generate_sub_queries_rcount())
     # print('{}_{}'.format(1, 2))
     # generate_true_card_tpch('tpch_1', sf=1)
-    generate_true_card_tpch('tpch_1', sf=5)
-    # generate_true_card_tpch('tpch_1', sf=10)
-    # generate_true_card_tpch('tpch_1', sf=50)
-    # generate_true_card_tpch('tpch_1', sf=100)
+    generate_true_card_tpch(sf=5)
